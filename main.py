@@ -81,3 +81,5 @@ for _ in range(n_check_points):
 print("The route is:")
 print("->".join(map(lambda x: str(x.id), chosen_check_points)))
 print(f"The total distance is {total_distance:.2f} m")
+
+input("Press any key to quit")
