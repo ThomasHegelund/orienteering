@@ -50,8 +50,10 @@ max_total_distance = validate_number_input('How long do you max want the route t
 
 total_distance = 0
 current_distance = 0
+distance_from_end_to_start = 0
 
-last_check_point = check_points[53]
+start_check_point = check_points[53]
+last_check_point = start_check_point
 chosen_check_points.append(last_check_point)
 check_points.remove(last_check_point)
 
@@ -60,7 +62,7 @@ for _ in range(n_check_points):
     first_run = True
     check_points_avaliable = True
 
-    while first_run or total_distance > max_total_distance:
+    while first_run or total_distance + distance_from_end_to_start > max_total_distance:
         if len(check_points) == 0:
             check_points_avaliable = False
             break
@@ -71,6 +73,7 @@ for _ in range(n_check_points):
         new_check_point = choice(check_points)
 
         distance = euclidean_distance(last_check_point, new_check_point)
+        distance_from_end_to_start = euclidean_distance(new_check_point, start_check_point)
         total_distance += distance
     
         check_points.remove(new_check_point)
@@ -78,8 +81,9 @@ for _ in range(n_check_points):
     if check_points_avaliable:
         chosen_check_points.append(new_check_point)
 
+total_distance += distance_from_end_to_start
 print("The route is:")
 print("->".join(map(lambda x: str(x.id), chosen_check_points)))
 print(f"The total distance is {total_distance:.2f} m")
 
-input("Press any key to quit")
+input("Press Enter to quit")
