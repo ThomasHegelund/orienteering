@@ -1,6 +1,6 @@
 import pytest
 from math import sqrt
-from orienteering import euclidean_distance, CheckPoint, get_valid_number_input
+from orienteering import euclidean_distance, CheckPoint, get_valid_number_input, is_number
 
 
 class Test_euclidean_distance:
@@ -36,3 +36,13 @@ class Test_get_valid_number_input:
         self.set_stdin('1.5', monkeypatch)
         number = get_valid_number_input('')
         assert number - 1.5 < 1e-5
+
+class Test_is_number:
+    def test_valid_int(self):
+        assert is_number('123') is True
+
+    def test_valid_float(self):
+        assert is_number('123.321') is True
+
+    def test_string(self):
+        assert is_number('aaa') is False
