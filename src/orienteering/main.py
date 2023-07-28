@@ -49,6 +49,65 @@ def get_valid_number_input(input_text: str):
     
     return float(user_input)
 
+
+class Orienteering:
+    def __init__(self, all_check_points: list[CheckPoint], max_check_points: int, max_total_distance: float) -> None:
+        self.all_check_points = all_check_points
+        self.max_check_points = n_check_points
+        self.max_total_distance = max_total_distance
+        self.starting_point = self.all_check_points[53]
+        self.route = Route(self.starting_point)
+        self.added_check_points = 0
+
+    def _create_route(self):
+        while self.added_check_points > self.max_check_points and 
+
+@dataclass
+class RouteLimits:
+    max_check_points: int
+    max_total_distance: float
+
+class Route:
+    def __init__(self, starting_point: CheckPoint) -> None:
+        self.starting_point = starting_point
+        self.check_points = [starting_point]
+
+        self.route_distance = 0
+        self.return_distance = 0
+    
+    def add_check_point(self, check_point: CheckPoint):
+        self.check_points.append(check_point)
+        self._update_distance()
+
+    def get_total_distance_with_new_check_point(self, check_point: CheckPoint):
+        new_route_distance = self._get_new_route_distance(check_point)
+        new_return_distance = RouteSegment(check_point, self.starting_point).distance
+
+        return new_route_distance + new_return_distance
+
+    def _update_distance(self):
+        self.route_distance += euclidean_distance(self.check_points[-2], self.check_points[-1])
+        self.return_distance = euclidean_distance(self.check_points[-1], self.starting_point)
+
+    def _get_new_route_distance(self, new_check_point: CheckPoint):
+        new_route_segment = RouteSegment(self.check_points[-1], new_check_point)
+        return self.route_distance + new_route_segment.distance
+
+    @property
+    def total_distance(self):
+        return self.route_distance + self.return_distance
+
+
+class RouteSegment:
+    def __init__(self, start_check_point: CheckPoint, end_check_point: CheckPoint) -> None:
+        self.start_check_point = start_check_point
+        self.end_check_point = end_check_point
+
+    @property
+    def distance(self) -> float:
+        return euclidean_distance(self.start_check_point, self.end_check_point)
+
+
 if __name__ == "__main__":
     check_points = load_check_points('checkpoints.csv')
 
